@@ -1,0 +1,359 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>TikTok Video Viewer</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <style>
+        :root {
+            --primary-color: #fe2c55;
+            --primary-hover: #ff4468;
+            --background-color: #000000;
+            --card-bg: #121212;
+            --text-color: #ffffff;
+            --text-secondary: #8a8b91;
+            --border-color: #2f2f2f;
+            --input-bg: #1f1f1f;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+            background-color: var(--background-color);
+            color: var(--text-color);
+            line-height: 1.5;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        .header {
+            text-align: center;
+            margin-bottom: 30px;
+            padding: 20px 0;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        .header h1 {
+            font-size: 24px;
+            font-weight: 700;
+            background: linear-gradient(to right, var(--primary-color), #00f2ea);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .search-container {
+            display: flex;
+            justify-content: center;
+            margin-bottom: 30px;
+            gap: 12px;
+        }
+
+        .url-input {
+            width: 60%;
+            padding: 12px 20px;
+            border: 2px solid var(--input-bg);
+            border-radius: 8px;
+            background-color: var(--input-bg);
+            color: var(--text-color);
+            font-size: 16px;
+            transition: all 0.3s ease;
+        }
+
+        .url-input:focus {
+            outline: none;
+            border-color: var(--primary-color);
+            box-shadow: 0 0 0 2px rgba(254, 44, 85, 0.1);
+        }
+
+        .submit-btn {
+            padding: 12px 30px;
+            background-color: var(--primary-color);
+            border: none;
+            border-radius: 8px;
+            color: white;
+            font-weight: 600;
+            font-size: 16px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .submit-btn:hover {
+            background-color: var(--primary-hover);
+            transform: translateY(-1px);
+        }
+
+        .submit-btn:active {
+            transform: translateY(0);
+        }
+
+        .tiktok-container {
+            display: flex;
+            justify-content: center;
+            align-items: flex-start;
+            gap: 20px;
+            flex-wrap: wrap;
+        }
+
+        .video-card {
+            background-color: var(--card-bg);
+            border-radius: 12px;
+            overflow: hidden;
+            width: 340px;
+            margin-bottom: 20px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            transition: transform 0.3s ease;
+        }
+
+        .video-card:hover {
+            transform: translateY(-2px);
+        }
+
+        .video-wrapper {
+            position: relative;
+            width: 100%;
+            padding-bottom: 177.77%;
+            background-color: #000;
+        }
+
+        .video-wrapper video {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .video-info {
+            padding: 16px;
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        .video-description {
+            margin-bottom: 12px;
+        }
+
+        .description-text {
+            margin: 0;
+            font-size: 14px;
+            line-height: 1.4;
+            color: var(--text-color);
+            word-wrap: break-word;
+        }
+
+        .expand-btn {
+            background: none;
+            border: none;
+            color: var(--text-secondary);
+            font-size: 14px;
+            font-weight: 600;
+            padding: 8px 0;
+            cursor: pointer;
+            margin-top: 4px;
+            transition: all 0.2s ease;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .expand-btn:hover {
+            color: var(--primary-color);
+        }
+
+        .video-stats {
+            display: flex;
+            gap: 16px;
+            color: var(--text-secondary);
+            font-size: 14px;
+            border-top: 1px solid var(--border-color);
+            padding-top: 12px;
+        }
+
+        .stat {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            font-weight: 500;
+        }
+
+        .error-message {
+            background-color: rgba(254, 44, 85, 0.1);
+            color: var(--primary-color);
+            text-align: center;
+            padding: 12px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+            display: none;
+            font-weight: 500;
+        }
+
+        @media (max-width: 768px) {
+            .container {
+                padding: 16px;
+            }
+
+            .url-input {
+                width: 100%;
+            }
+
+            .search-container {
+                flex-direction: column;
+            }
+
+            .submit-btn {
+                width: 100%;
+            }
+            
+            .video-card {
+                width: 100%;
+                max-width: 340px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>ReTok (WIP)</h1>
+        </div>
+
+        <div class="search-container">
+            <input type="text" class="url-input" placeholder="Paste TikTok URL here" id="urlInput">
+            <button class="submit-btn" id="submitBtn">Load Video</button>
+        </div>
+
+        <div id="errorMessage" class="error-message"></div>
+
+        <div class="tiktok-container" id="videoContainer">
+            <!-- Video cards will be added here dynamically -->
+        </div>
+    </div>
+
+    <script>
+        const urlInput = document.getElementById('urlInput');
+        const submitBtn = document.getElementById('submitBtn');
+        const videoContainer = document.getElementById('videoContainer');
+        const errorMessage = document.getElementById('errorMessage');
+
+        async function loadVideoMetadata(url) {
+            try {
+                const response = await fetch(`/metadata?url=${encodeURIComponent(url)}`);
+                if (!response.ok) throw new Error('Failed to load video metadata');
+                return await response.json();
+            } catch (error) {
+                throw new Error('Failed to load video metadata');
+            }
+        }
+
+        function createVideoCard(metadata, videoUrl) {
+            const card = document.createElement('div');
+            card.className = 'video-card';
+            
+            const desc = metadata.desc || 'TikTok Video';
+            const needsExpansion = desc.length > 100;
+            const truncatedDesc = needsExpansion ? `${desc.slice(0, 100)}...` : desc;
+            
+            card.innerHTML = `
+                <div class="video-wrapper">
+                    <video controls autoplay loop>
+                        <source src="/stream?url=${encodeURIComponent(videoUrl)}" type="video/mp4">
+                    </video>
+                </div>
+                <div class="video-info">
+                    <div class="video-description">
+                        <p class="description-text ${needsExpansion ? 'truncated' : ''}">${truncatedDesc}</p>
+                        ${needsExpansion ? `
+                            <p class="description-text expanded" style="display: none;">${desc}</p>
+                            <button class="expand-btn">Show more</button>
+                        ` : ''}
+                    </div>
+                    <div class="video-stats">
+                        <div class="stat">
+                            <span>❤️ ${formatNumber(metadata.stats.diggCount)}</span>
+                        </div>
+                        <div class="stat">
+                            <span>💬 ${formatNumber(metadata.stats.commentCount)}</span>
+                        </div>
+                        <div class="stat">
+                            <span>🔁 ${formatNumber(metadata.stats.shareCount)}</span>
+                        </div>
+                    </div>
+                </div>
+            `;
+
+            if (needsExpansion) {
+                const expandBtn = card.querySelector('.expand-btn');
+                const truncatedText = card.querySelector('.truncated');
+                const expandedText = card.querySelector('.expanded');
+
+                expandBtn.addEventListener('click', () => {
+                    const isExpanded = truncatedText.style.display === 'none';
+                    if (isExpanded) {
+                        truncatedText.style.display = 'block';
+                        expandedText.style.display = 'none';
+                        expandBtn.textContent = 'Show more';
+                    } else {
+                        truncatedText.style.display = 'none';
+                        expandedText.style.display = 'block';
+                        expandBtn.textContent = 'Show less';
+                    }
+                });
+            }
+
+            return card;
+        }
+
+        function formatNumber(num) {
+            if (num >= 1000000) {
+                return (num / 1000000).toFixed(1) + 'M';
+            }
+            if (num >= 1000) {
+                return (num / 1000).toFixed(1) + 'K';
+            }
+            return num.toString();
+        }
+
+        function showError(message) {
+            errorMessage.textContent = message;
+            errorMessage.style.display = 'block';
+            setTimeout(() => {
+                errorMessage.style.display = 'none';
+            }, 5000);
+        }
+
+        submitBtn.addEventListener('click', async () => {
+            const url = urlInput.value.trim();
+            if (!url) {
+                showError('Please enter a TikTok URL');
+                return;
+            }
+
+            try {
+                const metadata = await loadVideoMetadata(url);
+                const videoCard = createVideoCard(metadata, url);
+                videoContainer.insertBefore(videoCard, videoContainer.firstChild);
+                urlInput.value = '';
+            } catch (error) {
+                showError(error.message);
+            }
+        });
+
+        urlInput.addEventListener('keypress', (e) => {
+            if (e.key === 'Enter') {
+                submitBtn.click();
+            }
+        });
+    </script>
+</body>
+</html>
